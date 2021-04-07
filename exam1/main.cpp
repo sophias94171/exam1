@@ -14,8 +14,8 @@ uLCD_4DGL uLCD(D1, D0, D2);
 
 int N = 256;
 float f[4] = {1,0.5, 0.25, 0.125};
-int f_cur = 3;
-int f_idx = 3;
+int f_cur = 0;
+int f_idx = 0;
 void display(){
     uLCD.locate(0, 0);
     for (int i=0;i<4;i++){
@@ -52,8 +52,8 @@ int main(void){
         // check button
         if(B0.read()){
             f_cur  = f_cur + 1;
-            if(f_cur>7)
-                f_cur = 7;
+            if(f_cur>3)
+                f_cur = 3;
             display();
             // ThisThread::sleep_for(10ms);
         }
@@ -75,28 +75,28 @@ int main(void){
         }
         // T = 1/ freq
         T = 1000/f[f_idx];
-        if(index < 0.2*T){
-            aout = float(index)/0.2/T*scale;
+        int T1 = 80 ;
+        int T2 = 240 ;
+        int slp[4] = {80,40,20,10};
+        int slp2[4] = {160,200,220,230};
+        int fint[4] = {1,2,4,8};
+
+        if(index < T1/fint[f_idx]){ 
+            aout = scale* float(index) / float(slp[f_idx]);
+        }
+        if(index > T2-(T1/fint[f_idx])){
+            aout = (float(T2)-float(index-T2))*float(index) / float(slp[f_idx]);
+            //scale*(1- float(index-0.2*T)/0.8/T);
         }
         else{
-            aout = scale*(1- float(index-0.2*T)/0.8/T);
-        }
-        if(index < T)
+            aout = scale;
+            }
+        if(index < 240)
             index = index +1;
         else
             index = 0;
-        // set aout
-        if(record_flag==1){
-            adc_buffer[adc_cnt] = ain;
-            adc_cnt = adc_cnt +1;
-            if(adc_cnt==N){
-                for(int i=0;i<N;i++)
-                    printf("%d, %f\n", i, adc_buffer[i]);
-                printf("---\n");
-                record_flag = 0;
-                adc_cnt = 0;       
-            }   
-        }
+        //
+
         ThisThread::sleep_for(1ms);
    }
 
