@@ -96,6 +96,18 @@ int main(void){
         else
             index = 0;
         //
+        
+        if(record_flag==1){
+            adc_buffer[adc_cnt] = ain;
+            adc_cnt = adc_cnt +1;
+            if(adc_cnt==N){
+                for(int i=0;i<N;i++)
+                    printf("%d, %f\n", i, adc_buffer[i]);
+                printf("---\n");
+                record_flag = 0;
+                adc_cnt = 0;       
+            }   
+        }
 
         ThisThread::sleep_for(1ms);
    }
