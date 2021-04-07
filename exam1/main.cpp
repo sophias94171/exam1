@@ -13,18 +13,18 @@ DigitalIn B2(D10);
 uLCD_4DGL uLCD(D1, D0, D2);
 
 int N = 256;
-float f[8] = {20, 50, 75, 106, 125, 150, 250, 500};
+float f[4] = {1,0.5, 0.25, 0.125};
 int f_cur = 3;
 int f_idx = 3;
 void display(){
     uLCD.locate(0, 0);
-    for (int i=0;i<8;i++){
+    for (int i=0;i<4;i++){
         uLCD.color(GREEN);
         if (i==f_cur)
             uLCD.color(BLUE);
         if (i==f_idx)
             uLCD.color(RED);
-        uLCD.printf("%.1f   \n", f[i]);
+        uLCD.printf("%.3f   \n", f[i]);
     }
 }
 
